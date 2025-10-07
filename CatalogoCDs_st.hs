@@ -8,6 +8,9 @@
 -------------------------------------------------------------------------------
 -- GRUPO C: Desarrollo sobre Series
 -------------------------------------------------------------------------------
+{-# OPTIONS_GHC -Wno-unrecognised-pragmas #-}
+{-# HLINT ignore "Eta reduce" #-}
+{-# HLINT ignore "Avoid lambda" #-}
 module CatalogoCD where
 -- import Data.XXX
 
@@ -69,7 +72,7 @@ qsortBy :: Ord b => (a -> b) -> [a] -> [a]
 -- Dado un listado de series, calcula el numero de series por genero
 -- incluido en el mismo
 contarNumSeriesXGenero:: [Serie]->[(GeneroS, Int)]
-contarNumSeriesXGenero = foldl (flip encuentraGen) []
+contarNumSeriesXGenero xs = foldl (\acc s -> encuentraGen s acc) [] xs
 --contarNumSeriesXGenero series = map (\xs -> (head xs, length xs)) (group (sort (map genero series)))
 
 encuentraGen :: Serie -> [(GeneroS, Int)] -> [(GeneroS, Int)]
