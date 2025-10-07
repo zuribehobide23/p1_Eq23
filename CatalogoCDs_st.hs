@@ -121,7 +121,7 @@ generosSerieSinRepresentacion :: [Serie]->[GeneroS]
 -- Catalogos/Listados de ejemplos: Datos de prueba de series
 -- ======================================
 
-s1 = ("El verano en que me enamore", 3, 9, 55, Romance, 16) :: Serie
+s1 = ("El verano en el que me volvi bonita", 3, 9, 55, Romance, 16) :: Serie
 s2 = ("Stranger Things", 5, 8, 80, Terror, 16) :: Serie
 s3 = ("Paquita Salas", 3, 5, 30, Comedia, 12) :: Serie
 s4 = ("Euphoria", 2, 8, 55, Drama, 18) :: Serie
