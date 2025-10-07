@@ -74,12 +74,6 @@ qsortBy :: Ord b => (a -> b) -> [a] -> [a]
 contarNumSeriesXGenero:: [Serie]->[(GeneroS, Int)]
 contarNumSeriesXGenero xs = foldl (\acc s -> encuentraGen s acc) [] xs
 
-encuentraGen :: Serie -> [(GeneroS, Int)] -> [(GeneroS, Int)]
-encuentraGen serie [] = [(getGeneroS serie, 1)]
-encuentraGen serie ((g, n):xs)
-    | g == getGeneroS serie = (g, n + 1) : xs
-    | otherwise = (g, n) : encuentraGen serie xs
-
 --2	
 
 -- Dada la edad y un listado de series, selecciona todas las series cuya edad
@@ -116,15 +110,12 @@ totalMinutosCatalogo xs = foldl (\acc s -> acc + getDuracionEp s * getEpisodiosX
 generoSMasProlifico:: [Serie] -> GeneroS 
 generoSMasProlifico xs = devolverMax (contarNumSeriesXGenero xs)
 
-devolverMax :: [(GeneroS, Int)] -> GeneroS
-devolverMax [] = error "Tiene q haber al menos una serie"
-devolverMax xs = fst $ foldl1 (\acc x -> if snd x > snd acc then x else acc) xs
---No se si se puede usar el fst
-
 {-
 -- 7	
 -- Listado de series ordenado decrecientemente por número total de episodios
 rankingSeriesPorNumTotalEpisodios:: [Serie] -> [(Serie, Int)]
+
+
 
 -- 8 	
 -- Listado de series ordenado crecientemente por duración total (en minutos), 
@@ -141,8 +132,17 @@ generosSerieSinRepresentacion :: [Serie]->[GeneroS]
 -- =============================
 -- Resto de funciones auxiliares (para gestionar el catalogo de series)
 -- ============================
+encuentraGen :: Serie -> [(GeneroS, Int)] -> [(GeneroS, Int)]
+encuentraGen serie [] = [(getGeneroS serie, 1)]
+encuentraGen serie ((g, n):xs)
+    | g == getGeneroS serie = (g, n + 1) : xs
+    | otherwise = (g, n) : encuentraGen serie xs
 
 
+devolverMax :: [(GeneroS, Int)] -> GeneroS
+devolverMax [] = error "Tiene q haber al menos una serie"
+devolverMax xs = fst $ foldl1 (\acc x -> if snd x > snd acc then x else acc) xs
+--No se si se puede usar el fst
 
 -- ======================================
 -- Catalogos/Listados de ejemplos: Datos de prueba de series
