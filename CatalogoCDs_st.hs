@@ -88,12 +88,14 @@ seriesParaMayoresDe:: Edad -> [Serie]-> [Serie]
 seriesParaMayoresDe e xs = filter (\(_,_,_,_,_,edad) -> edad >= e) xs
 
 
-{-
+
 -- 3
 -- Dado un numero de temporadas y un listado de series, extrae los títulos de 
--- lass series que tienen a los sumo ese numero de temporadas
+-- las series que tienen a los sumo ese numero de temporadas
 titulosSconPocasTemporadas:: NTemporadas -> [Serie] -> [Titulo]
+titulosSconPocasTemporadas n xs = map getTituloS (filter (\s -> getTemporadas s == n) xs)
 
+{-
 -- 4
 -- Dado n el numero de series, dm la duracion maxima en minutos y un listado de 
 -- series, selecciona n series del listado con duracion menor o igual a dm 
