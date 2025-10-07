@@ -73,19 +73,22 @@ qsortBy :: Ord b => (a -> b) -> [a] -> [a]
 -- incluido en el mismo
 contarNumSeriesXGenero:: [Serie]->[(GeneroS, Int)]
 contarNumSeriesXGenero xs = foldl (\acc s -> encuentraGen s acc) [] xs
---contarNumSeriesXGenero series = map (\xs -> (head xs, length xs)) (group (sort (map genero series)))
 
 encuentraGen :: Serie -> [(GeneroS, Int)] -> [(GeneroS, Int)]
 encuentraGen serie [] = [(getGeneroS serie, 1)]
 encuentraGen serie ((g, n):xs)
     | g == getGeneroS serie = (g, n + 1) : xs
     | otherwise = (g, n) : encuentraGen serie xs
+
 --2	
-{-
+
 -- Dada la edad y un listado de series, selecciona todas las series cuya edad
 -- recomendada sea igual o superior a la dada
 seriesParaMayoresDe:: Edad -> [Serie]-> [Serie]
+seriesParaMayoresDe e xs = filter (\(_,_,_,_,_,edad) -> edad >= e) xs
 
+
+{-
 -- 3
 -- Dado un numero de temporadas y un listado de series, extrae los títulos de 
 -- lass series que tienen a los sumo ese numero de temporadas
