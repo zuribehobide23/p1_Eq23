@@ -13,7 +13,7 @@ module CatalogoCD where
 
 type Serie = (Titulo, NTemporadas, EpisodiosXTemporada, DuracionM, GeneroS, Edad )
 type Titulo = [Char]
-data GeneroS = Accion | Animacion | Comedia | Drama | Documental | SciFic | Suspense | Romance | Terror deriving (Show)
+data GeneroS = Accion | Animacion | Comedia | Drama | Documental | SciFic | Suspense | Romance | Terror deriving (Show, Eq)
 type Edad = Int                -- edad minima para consumir el contenido 
 type NTemporadas = Int
 type EpisodiosXTemporada = Int -- promedio
@@ -40,16 +40,16 @@ getDuracionEp :: Serie -> DuracionM
 getDuracionEp (_,_,_,x,_,_) = x
 
 -- Extrae el genero de la serie AV.
-getGeneroS :: Serie -> GeneroS 
+getGeneroS :: Serie -> GeneroS
 getGeneroS (_,_,_,_,x,_) = x
 
 -- Extrae la edad minima recomendada.
-getEdad :: Serie -> Edad 
+getEdad :: Serie -> Edad
 getEdad (_,_,_,_,_,x) = x
 
 -- Titulo, Nº de Temporadas, y Edad minima de la serie, seguido de salto de linea
 printSerie :: Serie -> String
-printSerie (t,n,_,_,_,e) = t ++ "\n" ++ show (n) ++ "\n" ++ show (e) ++ "\n" 
+printSerie (t,n,_,_,_,e) = t ++ "\n" ++ show (n) ++ "\n" ++ show (e) ++ "\n"
 
 -- Imprime la lista completa de canciones (playlist), formateada
 printSeries :: [Serie] -> IO ()
@@ -69,7 +69,8 @@ qsortBy :: Ord b => (a -> b) -> [a] -> [a]
 -- Dado un listado de series, calcula el numero de series por genero
 -- incluido en el mismo
 contarNumSeriesXGenero:: [Serie]->[(GeneroS, Int)]
-contarNumSeriesXGenero (x:xs) = foldr1 (\(e:xs) x -> encuentraGen x e:xs)
+contarNumSeriesXGenero = foldl (flip encuentraGen) []
+--contarNumSeriesXGenero series = map (\xs -> (head xs, length xs)) (group (sort (map genero series)))
 
 encuentraGen :: Serie -> [(GeneroS, Int)] -> [(GeneroS, Int)]
 encuentraGen serie [] = [(getGeneroS serie, 1)]
