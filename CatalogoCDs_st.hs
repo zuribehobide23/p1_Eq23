@@ -65,13 +65,19 @@ qsortBy :: Ord b => (a -> b) -> [a] -> [a]
 -- Funciones principales sobre Series
 -- ====================================
 
-{-
 -- 1
--- Dado un listado de series, calcula en numero de series por genero
+-- Dado un listado de series, calcula el numero de series por genero
 -- incluido en el mismo
 contarNumSeriesXGenero:: [Serie]->[(GeneroS, Int)]
+contarNumSeriesXGenero (x:xs) = foldr1 (\(e:xs) x -> encuentraGen x e:xs)
 
+encuentraGen :: Serie -> [(GeneroS, Int)] -> [(GeneroS, Int)]
+encuentraGen serie [] = [(getGeneroS serie, 1)]
+encuentraGen serie ((g, n):xs)
+    | g == getGeneroS serie = (g, n + 1) : xs
+    | otherwise = (g, n) : encuentraGen serie xs
 --2	
+{-
 -- Dada la edad y un listado de series, selecciona todas las series cuya edad
 -- recomendada sea igual o superior a la dada
 seriesParaMayoresDe:: Edad -> [Serie]-> [Serie]
@@ -108,8 +114,8 @@ rankingSeriesMasBreves:: [Serie]-> [(Serie, Int)]
 -- Dado un listado de series, identifica los generos (de serie) que NO estan 
 -- representados (que faltan) con respecto al conjunto completo de generos definidos
 generosSerieSinRepresentacion :: [Serie]->[GeneroS]
--}
 
+-}
 
 -- =============================
 -- Resto de funciones auxiliares (para gestionar el catalogo de series)
