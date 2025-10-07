@@ -101,17 +101,27 @@ titulosSconPocasTemporadas n xs = map getTituloS (filter (\s -> getTemporadas s 
 -- series, selecciona n series del listado con duracion menor o igual a dm 
 miSeleccionDeSeriesMasCortasQue:: Int -> DuracionM -> [Serie]-> [Serie]
 miSeleccionDeSeriesMasCortasQue n dm xs = take n (filter (\s -> getDuracionEp s <= dm) xs)
+--no se si se puede usar el take
 
-{-
+
 -- 5
 -- Dado un listado de series, determina la duración total (en minutos)
 -- de todos los episodios de todas sus temporadas
 totalMinutosCatalogo:: [Serie] -> DuracionM
+totalMinutosCatalogo xs = foldl (\acc s -> acc + getDuracionEp s * getEpisodiosXT s) 0 xs
+
 
 -- 6
 -- Dado un listado de series, identifica el genero (de series) con el más series
 generoSMasProlifico:: [Serie] -> GeneroS 
+generoSMasProlifico xs = devolverMax (contarNumSeriesXGenero xs)
 
+devolverMax :: [(GeneroS, Int)] -> GeneroS
+devolverMax [] = error "Tiene q haber al menos una serie"
+devolverMax xs = fst $ foldl1 (\acc x -> if snd x > snd acc then x else acc) xs
+--No se si se puede usar el fst
+
+{-
 -- 7	
 -- Listado de series ordenado decrecientemente por número total de episodios
 rankingSeriesPorNumTotalEpisodios:: [Serie] -> [(Serie, Int)]
