@@ -95,12 +95,14 @@ seriesParaMayoresDe e xs = filter (\(_,_,_,_,_,edad) -> edad >= e) xs
 titulosSconPocasTemporadas:: NTemporadas -> [Serie] -> [Titulo]
 titulosSconPocasTemporadas n xs = map getTituloS (filter (\s -> getTemporadas s == n) xs)
 
-{-
+
 -- 4
 -- Dado n el numero de series, dm la duracion maxima en minutos y un listado de 
 -- series, selecciona n series del listado con duracion menor o igual a dm 
 miSeleccionDeSeriesMasCortasQue:: Int -> DuracionM -> [Serie]-> [Serie]
+miSeleccionDeSeriesMasCortasQue n dm xs = take n (filter (\s -> getDuracionEp s <= dm) xs)
 
+{-
 -- 5
 -- Dado un listado de series, determina la duración total (en minutos)
 -- de todos los episodios de todas sus temporadas
