@@ -11,6 +11,7 @@
 {-# OPTIONS_GHC -Wno-unrecognised-pragmas #-}
 {-# HLINT ignore "Eta reduce" #-}
 {-# HLINT ignore "Avoid lambda" #-}
+{-# HLINT ignore "Use snd" #-}
 module CatalogoCD where
 -- import Data.XXX
 
@@ -58,10 +59,11 @@ printSerie (t,n,_,_,_,e) = t ++ "\n" ++ show (n) ++ "\n" ++ show (e) ++ "\n"
 printSeries :: [Serie] -> IO ()
 printSeries xs = putStr (concat (map printSerie xs))
 
-{-
+
 -- Implementacion del quicksort por clave
 qsortBy :: Ord b => (a -> b) -> [a] -> [a]
--}
+qsortBy _ [] = []
+qsortBy f (x:xs) = qsortBy f [y | y <- xs, f y <= f x] ++ [x] ++ qsortBy f [y | y <- xs, f y > f x]
 
 
 -- ====================================
@@ -95,7 +97,6 @@ titulosSconPocasTemporadas n xs = map getTituloS (filter (\s -> getTemporadas s 
 -- series, selecciona n series del listado con duracion menor o igual a dm 
 miSeleccionDeSeriesMasCortasQue:: Int -> DuracionM -> [Serie]-> [Serie]
 miSeleccionDeSeriesMasCortasQue n dm xs = take n (filter (\s -> getDuracionEp s <= dm) xs)
---no se si se puede usar el take
 
 
 -- 5
@@ -110,24 +111,29 @@ totalMinutosCatalogo xs = foldl (\acc s -> acc + getDuracionEp s * getEpisodiosX
 generoSMasProlifico:: [Serie] -> GeneroS 
 generoSMasProlifico xs = devolverMax (contarNumSeriesXGenero xs)
 
-{-
+
 -- 7	
 -- Listado de series ordenado decrecientemente por número total de episodios
 rankingSeriesPorNumTotalEpisodios:: [Serie] -> [(Serie, Int)]
-
+rankingSeriesPorNumTotalEpisodios [] = error"tiene que haber al menos una serie"
+rankingSeriesPorNumTotalEpisodios xs = reverse (qsortBy (\(_, tot) -> tot) (map (\s -> (s, getEpisodiosXT s * getTemporadas s)) xs))
 
 
 -- 8 	
 -- Listado de series ordenado crecientemente por duración total (en minutos), 
 -- considerando todos los episodios de todas sus temporadas
 rankingSeriesMasBreves:: [Serie]-> [(Serie, Int)]
+rankingSeriesMasBreves [] = error"tiene que haber al menos una serie"
+rankingSeriesMasBreves xs = qsortBy (\(_, tot) -> tot) (map (\s -> (s, getEpisodiosXT s * getTemporadas s * getDuracionEp s)) xs)
+
 
 -- 9
 -- Dado un listado de series, identifica los generos (de serie) que NO estan 
 -- representados (que faltan) con respecto al conjunto completo de generos definidos
 generosSerieSinRepresentacion :: [Serie]->[GeneroS]
+generosSerieSinRepresentacion xs = dif [Accion, Animacion, Comedia, Drama, Documental, SciFic, Suspense, Romance, Terror] (map getGeneroS xs)
 
--}
+
 
 -- =============================
 -- Resto de funciones auxiliares (para gestionar el catalogo de series)
@@ -142,8 +148,16 @@ encuentraGen serie ((g, n):xs)
 devolverMax :: [(GeneroS, Int)] -> GeneroS
 devolverMax [] = error "Tiene q haber al menos una serie"
 devolverMax xs = fst $ foldl1 (\acc x -> if snd x > snd acc then x else acc) xs
---No se si se puede usar el fst
 
+quitaUno:: Eq a => a -> [a] -> [a]
+quitaUno x []=[]
+quitaUno x (y:ys)
+    | x == y =ys
+    | x/=y = y:quitaUno x ys
+
+dif :: Eq a => [a] -> [a] -> [a]
+dif xs []  = xs
+dif xs (y:ys) = dif (quitaUno y xs) ys
 -- ======================================
 -- Catalogos/Listados de ejemplos: Datos de prueba de series
 -- ======================================
