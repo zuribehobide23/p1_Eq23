@@ -167,7 +167,7 @@ s2 = ("Stranger Things", 5, 8, 80, Terror, 16) :: Serie
 s3 = ("Paquita Salas", 3, 5, 30, Comedia, 12) :: Serie
 s4 = ("Euphoria", 2, 8, 55, Drama, 18) :: Serie
 s5 = ("Riverdale", 7, 20, 45, Drama, 16) :: Serie
-
+--makarroni
 misSeries::[Serie]
 misSeries = [s1,s2,s3,s4,s5]
 
