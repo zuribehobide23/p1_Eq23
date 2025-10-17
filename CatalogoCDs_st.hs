@@ -143,6 +143,7 @@ encuentraGen serie ((g, n):xs)
     | otherwise = (g, n) : encuentraGen serie xs
 
 devolverMax :: [(GeneroS, Int)] -> GeneroS
+devolverMax [] = error "Tiene que haber al menos una serie"
 devolverMax xs = fst $ foldl1 (\acc x -> if snd x > snd acc then x else acc) xs
 
 quitaUno:: Eq a => a -> [a] -> [a]
